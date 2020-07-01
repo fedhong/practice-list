@@ -1,0 +1,25 @@
+{
+  "name": "webpack-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-dev": "webpack --config webpack.config.js --mode development --output ./dist/bundle.dev.js",
+    "build-prod": "webpack --config webpack.config.js --mode production --output ./dist/bundle.prod.js",
+    "build-analyzer": "webpack --config webpack.analyzer.js",
+    "dev-start": "webpack-dev-server --config webpack.dev.server.js --color --progress --hot --open",
+    "// dev-start": "// --color 启用彩色打印  --progerss 启用进程监测 --hot 启用热加载 --open 自动打开网页"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "html-webpack-plugin": "^4.3.0",
+    "webpack": "^4.43.0",
+    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {}
+}
