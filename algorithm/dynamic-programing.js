@@ -58,39 +58,60 @@ function F3(n) {
 * 有一个国家发现了5座金矿，每座金矿的黄金储量不同，需要参与挖掘的工人数也不同。参与挖矿工人的总数是10人。
 * 每座金矿要么全挖，要么不挖，不能派出一半人挖取一半金矿。要求用程序求解出，要想得到尽可能多的黄金，应该选择挖取哪几座金矿？
 */
+const kuang = 5;
 const worker = 10;
-const golds = [
-    { gold: 50, person: 5 },
-    { gold: 30, person: 3 },
-    { gold: 80, person: 8 },
-    { gold: 70, person: 7 },
-    { gold: 110, person: 11 }
-];
+const kList = [500, 30, 80, 70, 600];
+const wList = [1, 9, 2, 7, 2];
 
-
-
-
-
-
-
-
-
-/**
- * 测试
- */
-
-function runTest(fun, n) {
-    const start = Date.now();
-    const result = fun.call(this, n);
-    const end = Date.now();
-    console.log(`${fun.name} use time: ${end - start}, result: ${result}`);
+// 方法一：排列组合
+function F4() {
 }
 
-// Test F1
-runTest(F1, 10);
+// 方法二：递归
+function F5(n, w, g = [], p = []) {// n:金矿数量 w:工人数量 g:金矿数组 p:金矿用工
+    if (n == 1) {
+        if (w < p[0]) {
+            return 0;
+        } else {
+            return g[0];
+        }
+    }
 
-// Test F2
-runTest(F2, 10)
+    let a = F5(n - 1, w, g, p);
+    if (w < p[n - 1]) return a;
 
-// Test F3
-runTest(F3, 10)
+    let b = F5(n - 1, w - p[n - 1], g, p) + g[n - 1];
+
+    return Math.max(a, b);
+}
+console.log(F5(kuang, worker, kList, wList));
+
+// 方法三：动态规划
+function F6(n, w, g = [], p = []) {// n:金矿数量 w:工人数量 g:金矿数组 p:金矿用工
+    /*    
+    let preResults = []; // p.length
+    let result = [];// p.length
+    //填充边界格子值
+    for (let i = 0; i <= n; i++) {
+        if (i < p[0]) {
+            preResults[i] = 0;
+        } else {
+            preResults[i] = g[0];
+        }
+    }
+    //填充其余格子的值，外层循环是金矿数量，内层循环是人工数
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j <= w; j++) {
+            if (j < p[i]) {
+                result[j] = preResults[j];
+            } else {
+                result[j] = Math.max(preResults[j], preResults[j - p[i]] + g[i]);
+            }
+        }
+        preResults = result;
+    }
+    return result[n];
+    */
+}
+
+console.log(F6(kuang, worker, kList, wList));
