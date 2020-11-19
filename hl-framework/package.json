@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "esm": "^3.2.25",
-    "rollup": "^2.33.3"
-  }
+    "rollup": "^2.33.3",
+    "rollup-plugin-html": "^0.2.1",
+    "rollup-plugin-html2": "^2.0.0"
+  },
+  "dependencies": {}
 }

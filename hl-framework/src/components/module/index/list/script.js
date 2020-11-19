@@ -1,9 +1,14 @@
-import importTpl from '../../../../framework/importTpl';
 import genComponent from '../../../../framework/genComponent';
 import tpl from './dom.html';
+import Li from '../item/script'
 
 const List = (props) => {
-    const data = props.data; // 或者AJAX获取
+    const data = {
+        list: props.data, // 或者AJAX获取
+        child: function (item) {
+            return Li({ data: item });
+        }
+    }
     const events = {
         onItemClick: function () {
             // TODO 局部更新

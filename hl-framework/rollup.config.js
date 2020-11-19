@@ -1,19 +1,24 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel';
+import html from 'rollup-plugin-html';
+import html2 from 'rollup-plugin-html2'
 
-export default [{
-    input: 'src/index.js',
+export default {
+    input: 'src/app.js',
     output: {
-        file: 'dist/bundle.js',
-        format: 'umd',
-        name: 'test'
+        file: 'build/bundle.js',
+        format: 'iife'
     },
     plugins: [
-        resolve(),
-        commonjs(),
-        babel({
-            exclude: 'node_modules/**'
+        html({
+            include: '**/*.html',
+            htmlMinifierOptions: {
+                collapseWhitespace: true,
+                collapseBooleanAttributes: true,
+                conservativeCollapse: true,
+                minifyJS: true
+            }
+        }),
+        html2({
+            template: './public/index.html',
         })
     ]
-}]
+};

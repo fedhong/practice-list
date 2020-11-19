@@ -1,10 +1,12 @@
+import genComponent from '../../framework/genComponent';
 import Header from '../../components/common/header/script';
-import List from '../../components/pages/index/list/script'
+import List from '../../components/module/index/list/script'
 import tpl from './dom.html';
 
-const header = Header({ data: '张三' });
+const header = Header({ data: { name: 'Holly' } });
 console.log('header:\n', header);
-const list = List({ data: [{ id: 1, name: 'a' }, { id: 2, name: 'b' }, { id: 3, name: 'c' }] });
+
+const list = List({ data: [{ id: 1, name: 'AAAAAAA' }, { id: 2, name: 'BBBBBBBB' }, { id: 3, name: 'CCCCCCCC' }] });
 console.log('list:\n', list);
 
 const Index = (props) => {
@@ -15,7 +17,8 @@ const Index = (props) => {
     const events = {};
 
     const component = genComponent(tpl, data, events);
+
     return component;
 }
 
-export default Index;
+export default Index();
