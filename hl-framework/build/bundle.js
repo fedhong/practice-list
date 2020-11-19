@@ -15,9 +15,15 @@
      * 运行时
      */
 
+    const eventsBus = {
+
+    };
+
     document.addEventListener("click", function (e) {
         const id = e.target.id;
-        // if (id == 1) {// TODO 判断冒泡目标
+        eventsBus[id] && eventsBus[id]();
+        // TODO 根据唯一标识，判断冒泡目标
+        // if (id == 1) {
         //     const de = e.target.attributes['data-event'];
         //     const data = de ? de.value : null;
         //     eventsBus[id](data);
@@ -26,21 +32,39 @@
 
     const genComponent = (tpl, data, events) => {
         const html = renderHTML(tpl, data);
-        // console.log('html', html);
-        // if (Object.keys(events).length > 0) {
-        //     for (let e in events) {
-        //         eventsBus['1'] = events[e];// TODO 获取唯一标识
-        //     }
-        // }
-        return html;
+        const container = document.createElement('div');
+        container.innerHTML = html;
+        const nodes = container.getElementsByTagName("*");
+        for (let i = 0, l = nodes.length; i < l; i++) {
+            if (nodes[i].onclick) {
+                const eventHandler = nodes[i].getAttribute("onclick");
+                console.log(eventHandler);
+                const eventNameAndParams = eventHandler.split("(");// TODO 参数变为string...
+                const methodName = eventNameAndParams[0];
+                const params = eventNameAndParams[1] ? eventNameAndParams[1].replace(")", "").split(",") : null;
+                console.log(params);
+                Object.keys(events).forEach(key => {
+                    if (key === methodName) {
+                        // TODO id不存在的情况，添加唯一标示
+                        eventsBus[nodes[i].id] = function () {
+                            events[key](...params);
+                        };
+                    }
+                });
+                nodes[i].removeAttribute("onclick");
+            }
+        }
+
+        return container.innerHTML;
     };
 
     var tpl = "<div> Hello：{{=it.name}} </div>";
 
     const Header = (props) => {    
         const data = props.data; // 或者AJAX获取
+        const events = {};
 
-        const component = genComponent(tpl, data);
+        const component = genComponent(tpl, data, events);
         return component;
     };
 
@@ -54,9 +78,14 @@
     var tpl$2 = "<li id=\"{{=it.id}}\" onclick='onItemClick(\"{{=it.id}}\",\"{{=it.name}}\")' style=\"cursor: pointer;\"> {{=it.name}} </li>";
 
     const Li = (props) => {
-        const data = props.data;    
+        const data = props.data;
+        const events = {
+            onItemClick: function (id, name) {
+                alert(id + ',' + name);
+            }
+        };
 
-        const component = genComponent(tpl$2, data);
+        const component = genComponent(tpl$2, data, events);
         return component;
     };
 
@@ -67,8 +96,14 @@
                 return Li({ data: item });
             }
         };
+        const events = {
+            onItemClick: function () {
+                // TODO 局部更新
+                // TODO reReader Virtual dom diff
+            }
+        };
 
-        const component = genComponent(tpl$1, data);
+        const component = genComponent(tpl$1, data, events);
         return component;
     };
 
@@ -85,8 +120,9 @@
             header,
             list
         };
+        const events = {};
 
-        const component = genComponent(tpl$3, data);
+        const component = genComponent(tpl$3, data, events);
 
         return component;
     };
