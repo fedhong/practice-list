@@ -2,7 +2,7 @@ import genComponent from '../../../../framework/genComponent';
 import tpl from './dom.html';
 
 const Li = (props) => {
-    const data = props.data;
+    const data = props.data;    
     const events = {
         onItemClick: function (obj) {
             console.log(obj);

@@ -15,33 +15,32 @@
      * 运行时
      */
 
-    const eventsBus = {};
-
     document.addEventListener("click", function (e) {
         const id = e.target.id;
-        if (id == 1) {
-            const de = e.target.attributes['data-event'];
-            const data = de ? de.value : null;
-            eventsBus[id](data);
-        }
+        // if (id == 1) {// TODO 判断冒泡目标
+        //     const de = e.target.attributes['data-event'];
+        //     const data = de ? de.value : null;
+        //     eventsBus[id](data);
+        // }
     });
 
     const genComponent = (tpl, data, events) => {
-        if (Object.keys(events).length > 0) {
-            for (let e in events) {
-                eventsBus['1'] = events[e];
-            }
-        }
-        return renderHTML(tpl, data);
+        const html = renderHTML(tpl, data);
+        // console.log('html', html);
+        // if (Object.keys(events).length > 0) {
+        //     for (let e in events) {
+        //         eventsBus['1'] = events[e];// TODO 获取唯一标识
+        //     }
+        // }
+        return html;
     };
 
-    var tpl = "<div> {{=it.name}} </div>";
+    var tpl = "<div> Hello：{{=it.name}} </div>";
 
     const Header = (props) => {    
         const data = props.data; // 或者AJAX获取
-        const events = {};
 
-        const component = genComponent(tpl, data, events);
+        const component = genComponent(tpl, data);
         return component;
     };
 
@@ -52,19 +51,12 @@
 
     var tpl$1 = "<div> <ul> {{~ it.list:item}} {{=it.child(item)}} {{~}} </ul> </div>";
 
-    var tpl$2 = "<li id=\"{{=it.id}}\" $onclick=\"onItemClick\" data-event='{\"id\":{{=it.id}},\"name\":\"{{=it.name}}\"}' style=\"cursor: pointer;\"> {{=it.name}} </li>";
+    var tpl$2 = "<li id=\"{{=it.id}}\" onclick='onItemClick(\"{{=it.id}}\",\"{{=it.name}}\")' style=\"cursor: pointer;\"> {{=it.name}} </li>";
 
     const Li = (props) => {
-        const data = props.data;
-        const events = {
-            onItemClick: function (obj) {
-                console.log(obj);
-                obj = JSON.parse(obj);
-                alert(obj.id + ',' + obj.name);
-            }
-        };
+        const data = props.data;    
 
-        const component = genComponent(tpl$2, data, events);
+        const component = genComponent(tpl$2, data);
         return component;
     };
 
@@ -75,20 +67,14 @@
                 return Li({ data: item });
             }
         };
-        const events = {
-            onItemClick: function () {
-                // TODO 局部更新
-                // TODO reReader Virtual dom diff
-            }
-        };
 
-        const component = genComponent(tpl$1, data, events);
+        const component = genComponent(tpl$1, data);
         return component;
     };
 
     var tpl$3 = "<div> {{=it.header}} {{=it.list}} </div>";
 
-    const header = Header({ data: { name: 'Holly' } });
+    const header = Header({ data: { name: 'Fedhong' } });
     console.log('header:\n', header);
 
     const list = List({ data: [{ id: 1, name: 'AAAAAAA' }, { id: 2, name: 'BBBBBBBB' }, { id: 3, name: 'CCCCCCCC' }] });
@@ -99,9 +85,8 @@
             header,
             list
         };
-        const events = {};
 
-        const component = genComponent(tpl$3, data, events);
+        const component = genComponent(tpl$3, data);
 
         return component;
     };
