@@ -1,4 +1,4 @@
-import genComponent from '../../framework/genComponent';
+import createComponent from '../../framework/createComponent';
 import Header from '../../components/common/header/script';
 import List from '../../components/module/index/list/script'
 import tpl from './dom.html';
@@ -13,7 +13,7 @@ const Index = (props) => {
         list
     };
 
-    const component = genComponent(tpl, data);
+    const component = createComponent(tpl, data);
 
     return component;
 }

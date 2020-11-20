@@ -1,4 +1,4 @@
-import genComponent from '../../../../framework/genComponent';
+import createComponent from '../../../../framework/createComponent';
 import tpl from './dom.html';
 import Li from '../item/script'
 
@@ -10,7 +10,7 @@ const List = (props) => {
         }
     }
 
-    const component = genComponent(tpl, data);
+    const component = createComponent(tpl, data);
     return component;
 }
 
