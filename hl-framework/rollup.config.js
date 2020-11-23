@@ -32,7 +32,7 @@ export default {
                 .then(result => result.css)
         }),
         serve({
-            open: false,// Launch in browser (default: false)
+            open: true,// Launch in browser (default: false)
             verbose: true,// Show server address in console (default: true)
             contentBase: ['build'],// Multiple folders to serve from
             host: 'localhost',

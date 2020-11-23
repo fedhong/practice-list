@@ -1,7 +1,8 @@
-import Index from './pages/index/script'
-import Profile from './pages/profile/script'
+import createRouter from './framework/createRouter';
+import config from './router/config';
 
-// TODO Router处理
+createRouter(config);
 
-document.getElementById('index').innerHTML = Index;
-// document.getElementById('profile').innerHTML = Profile;
+
+// import Index from './pages/index/script';
+// document.getElementById('index').innerHTML = Index;

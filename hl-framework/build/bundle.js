@@ -19,6 +19,32 @@
       return css;
     }
 
+    const createRouter = (config) => {
+        Object.keys(config).forEach((key, i) => {
+            const container = document.getElementById(key);
+            container.innerHTML = config[key];
+            if (i > 0) {
+                container.style.display = 'none';
+            }
+        });
+
+        if (!window.onhashchange) {
+            window.onhashchange = function () {
+                let curKey = location.hash.replace('#', '');
+                curKey = curKey || 'index';
+
+                Object.keys(config).forEach((key, i) => {
+                    const container = document.getElementById(key);
+                    if (curKey === key) {
+                        container.style.display = '';
+                    } else {
+                        container.style.display = 'none';
+                    }
+                });
+            };
+        }
+    };
+
     /**
      * doT.js https://github.com/olado/doT
      */
@@ -124,7 +150,7 @@
         return component;
     };
 
-    var tpl$3 = "<div> {{=it.header}} {{=it.list}} </div>";
+    var tpl$3 = "<div> {{=it.header}} {{=it.list}} </div> <a href=\"#profile\">详情页</a>";
 
     const header = Header({ data: { name: 'Fedhong' } });
     // TODO AJAX获取
@@ -143,9 +169,20 @@
 
     var Index$1 = Index();
 
-    // TODO Router处理
+    var tpl$4 = "<div> 个人信息页面 </div> <a href=\"#index\">首页</a> <a href=\"#\">首页1</a> <a href=\"/\">首页2</a>";
 
-    document.getElementById('index').innerHTML = Index$1;
+    const RouterConfig = {
+        index: Index$1,
+        profile: tpl$4
+    };
+
+    createRouter(RouterConfig);
+
+
+    // import Index from './pages/index/script';
+    // import Profile from './pages/profile/script';
+
+    // document.getElementById('index').innerHTML = Index;
     // document.getElementById('profile').innerHTML = Profile;
 
 }());
