@@ -1,3 +1,4 @@
-<li id="{{=it.id}}" onclick="onItemClick('{{=it.id}}','{{=it.name}}')" style="cursor: pointer;">
+<li id="{{=it.id}}" onclick='onItemClick({{=it.id}},"{{=it.name}}",{"id":{{=it.id}},"name":"{{=it.name}}"})'
+    style="cursor: pointer;">
     {{=it.name}}
 </li>
