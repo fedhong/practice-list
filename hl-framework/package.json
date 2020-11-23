@@ -10,9 +10,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "autoprefixer": "^10.0.2",
+    "postcss": "^8.1.9",
     "rollup": "^2.33.3",
     "rollup-plugin-html": "^0.2.1",
-    "rollup-plugin-html2": "^2.0.0"
+    "rollup-plugin-html2": "^2.0.0",
+    "rollup-plugin-sass": "^1.2.2",
+    "rollup-plugin-serve": "^1.1.0"
   },
   "dependencies": {}
 }

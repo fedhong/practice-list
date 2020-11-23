@@ -1,5 +1,6 @@
 import createComponent from '../../../../framework/createComponent';
 import tpl from './dom.html';
+import './style.scss';
 
 const Li = (props) => {
     const data = props.data;

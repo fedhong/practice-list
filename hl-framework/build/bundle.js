@@ -1,6 +1,24 @@
 (function () {
     'use strict';
 
+    
+
+    function ___$insertStyle(css) {
+      if (!css) {
+        return;
+      }
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      var style = document.createElement('style');
+
+      style.setAttribute('type', 'text/css');
+      style.innerHTML = css;
+      document.head.appendChild(style);
+      return css;
+    }
+
     /**
      * doT.js https://github.com/olado/doT
      */
@@ -76,7 +94,9 @@
 
     var tpl$1 = "<div> <ul> {{~ it.list:item}} {{=it.child(item)}} {{~}} </ul> </div>";
 
-    var tpl$2 = "<li id=\"{{=it.id}}\" onclick='onItemClick({{=it.id}},\"{{=it.name}}\",{\"id\":{{=it.id}},\"name\":\"{{=it.name}}\"})' style=\"cursor: pointer;\"> {{=it.name}} </li>";
+    var tpl$2 = "<li id=\"{{=it.id}}\" onclick='onItemClick({{=it.id}},\"{{=it.name}}\",{\"id\":{{=it.id}},\"name\":\"{{=it.name}}\"})' class=\"item\"> {{=it.name}} </li>";
+
+    ___$insertStyle(".item {\n  cursor: pointer;\n  border: 1px solid red;\n  border-radius: 5px;\n}");
 
     const Li = (props) => {
         const data = props.data;
