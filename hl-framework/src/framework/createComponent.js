@@ -55,7 +55,6 @@ const bindEvent = (node, type, events = {}) => {
 
 document.addEventListener('click', function (e) {
     const uniqueId = e.target.getAttribute(DATA_EVENT_UNIQUE_ID_KEY);
-    console.log('uniqueId', uniqueId);
     eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId](e);
 })
 

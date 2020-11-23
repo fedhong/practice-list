@@ -1,24 +1,6 @@
 (function () {
     'use strict';
 
-    
-
-    function ___$insertStyle(css) {
-      if (!css) {
-        return;
-      }
-      if (typeof window === 'undefined') {
-        return;
-      }
-
-      var style = document.createElement('style');
-
-      style.setAttribute('type', 'text/css');
-      style.innerHTML = css;
-      document.head.appendChild(style);
-      return css;
-    }
-
     const createRouter = (config) => {
         Object.keys(config).forEach((key, i) => {
             const container = document.getElementById(key);
@@ -102,7 +84,6 @@
 
     document.addEventListener('click', function (e) {
         const uniqueId = e.target.getAttribute(DATA_EVENT_UNIQUE_ID_KEY);
-        console.log('uniqueId', uniqueId);
         eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId](e);
     });
 
@@ -131,14 +112,10 @@
 
     var tpl$2 = "<li id=\"{{=it.id}}\" onclick='onItemClick($event,{{=it.id}},\"{{=it.name}}\",{\"id\":{{=it.id}},\"name\":\"{{=it.name}}\"})' class=\"item\"> {{=it.name}} </li>";
 
-    ___$insertStyle(".item {\n  cursor: pointer;\n  border: 1px solid red;\n  border-radius: 5px;\n}");
-
     const Li = (props) => {
         const data = props.data;
         const events = {
-            onItemClick: function (e, id, name, obj) {// TODO $event传递
-
-                console.log(e);
+            onItemClick: function (e, id, name, obj) {
                 console.log(id + ',' + name);
                 console.log(JSON.stringify(obj));
                 //Dom局部更新
@@ -185,7 +162,7 @@
 
     var Index$1 = Index();
 
-    var tpl$4 = "<div> 个人信息页面 </div> <a href=\"#index\">首页</a> <a href=\"#\">首页1</a> <a href=\"/\">首页2</a>";
+    var tpl$4 = "<div> 个人信息页面 </div> <a href=\"#index\">首页</a>&nbsp;|&nbsp;<a href=\"#\">首页</a>";
 
     const RouterConfig = {
         index: Index$1,

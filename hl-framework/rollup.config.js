@@ -25,14 +25,14 @@ export default {
             template: './public/index.html',
         }),
         sass({
-            output: 'bundle.css',
-            insert: true,
+            output: 'build/bundle.css',
+            insert: false,
             processor: css => postcss([autoprefixer])
                 .process(css)
                 .then(result => result.css)
         }),
         serve({
-            open: true,// Launch in browser (default: false)
+            open: false,// Launch in browser (default: false)
             verbose: true,// Show server address in console (default: true)
             contentBase: ['build'],// Multiple folders to serve from
             host: 'localhost',

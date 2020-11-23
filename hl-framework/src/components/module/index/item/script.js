@@ -5,8 +5,7 @@ import './style.scss';
 const Li = (props) => {
     const data = props.data;
     const events = {
-        onItemClick: function (e, id, name, obj) {// TODO $event传递
-            console.log(e);
+        onItemClick: function (e, id, name, obj) {
             console.log(id + ',' + name);
             console.log(JSON.stringify(obj))
             //Dom局部更新
