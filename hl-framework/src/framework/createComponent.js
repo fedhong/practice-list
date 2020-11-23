@@ -5,7 +5,8 @@
 
 const eval2 = eval;
 const DATA_EVENT_UNIQUE_ID_KEY = 'data_event_unique_id';
-const ON_CLICK = 'onclick'
+const ON_CLICK = 'onclick';
+const $EVENT = '$event';
 const eventsBus = {
     onclick: {}
 };
@@ -30,12 +31,20 @@ const bindEvent = (node, type, events = {}) => {
                 const uniqueId = `${type}_${Object.keys(eventsBus[type]).length + 1}`;
                 node.setAttribute(DATA_EVENT_UNIQUE_ID_KEY, uniqueId);
                 if (strParams) {
-                    eventsBus[type][uniqueId] = function () {
-                        events[key](...eval2(`[${strParams}]`));
+                    const hasEventArg = strParams.indexOf($EVENT) === 0;
+                    if (hasEventArg) {
+                        strParams = strParams.replace($EVENT, '');
+                    }
+                    eventsBus[type][uniqueId] = function (e) {
+                        const args = eval2(`[${strParams}]`);
+                        if (hasEventArg) {
+                            args[0] = e;
+                        }
+                        events[key](...args);
                     };
                 } else {
-                    eventsBus[type][uniqueId] = function () {
-                        events[key]();
+                    eventsBus[type][uniqueId] = function (e) {
+                        events[key](e);
                     };
                 }
             }
@@ -47,7 +56,7 @@ const bindEvent = (node, type, events = {}) => {
 document.addEventListener('click', function (e) {
     const uniqueId = e.target.getAttribute(DATA_EVENT_UNIQUE_ID_KEY);
     console.log('uniqueId', uniqueId);
-    eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId]();
+    eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId](e);
 })
 
 const createComponent = (tpl, data, events) => {

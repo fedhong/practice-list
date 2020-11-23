@@ -53,6 +53,7 @@
     const eval2 = eval;
     const DATA_EVENT_UNIQUE_ID_KEY = 'data_event_unique_id';
     const ON_CLICK = 'onclick';
+    const $EVENT = '$event';
     const eventsBus = {
         onclick: {}
     };
@@ -77,12 +78,20 @@
                     const uniqueId = `${type}_${Object.keys(eventsBus[type]).length + 1}`;
                     node.setAttribute(DATA_EVENT_UNIQUE_ID_KEY, uniqueId);
                     if (strParams) {
-                        eventsBus[type][uniqueId] = function () {
-                            events[key](...eval2(`[${strParams}]`));
+                        const hasEventArg = strParams.indexOf($EVENT) === 0;
+                        if (hasEventArg) {
+                            strParams = strParams.replace($EVENT, '');
+                        }
+                        eventsBus[type][uniqueId] = function (e) {
+                            const args = eval2(`[${strParams}]`);
+                            if (hasEventArg) {
+                                args[0] = e;
+                            }
+                            events[key](...args);
                         };
                     } else {
-                        eventsBus[type][uniqueId] = function () {
-                            events[key]();
+                        eventsBus[type][uniqueId] = function (e) {
+                            events[key](e);
                         };
                     }
                 }
@@ -94,7 +103,7 @@
     document.addEventListener('click', function (e) {
         const uniqueId = e.target.getAttribute(DATA_EVENT_UNIQUE_ID_KEY);
         console.log('uniqueId', uniqueId);
-        eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId]();
+        eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId](e);
     });
 
     const createComponent = (tpl, data, events) => {
@@ -120,17 +129,24 @@
 
     var tpl$1 = "<div> <ul> {{~ it.list:item}} {{=it.child(item)}} {{~}} </ul> </div>";
 
-    var tpl$2 = "<li id=\"{{=it.id}}\" onclick='onItemClick({{=it.id}},\"{{=it.name}}\",{\"id\":{{=it.id}},\"name\":\"{{=it.name}}\"})' class=\"item\"> {{=it.name}} </li>";
+    var tpl$2 = "<li id=\"{{=it.id}}\" onclick='onItemClick($event,{{=it.id}},\"{{=it.name}}\",{\"id\":{{=it.id}},\"name\":\"{{=it.name}}\"})' class=\"item\"> {{=it.name}} </li>";
 
     ___$insertStyle(".item {\n  cursor: pointer;\n  border: 1px solid red;\n  border-radius: 5px;\n}");
 
     const Li = (props) => {
         const data = props.data;
         const events = {
-            onItemClick: function (id, name, obj) {
-                // TODO Dom局部更新 || reRender?
-                alert(id + ',' + name);
-                alert(JSON.stringify(obj));
+            onItemClick: function (e, id, name, obj) {// TODO $event传递
+
+                console.log(e);
+                console.log(id + ',' + name);
+                console.log(JSON.stringify(obj));
+                //Dom局部更新
+                data.name = 'click here';
+                const component = createComponent(tpl$2, data, events);
+
+                //reRender
+                e.target.outerHTML = component;
             }
         };
 
@@ -180,9 +196,6 @@
 
 
     // import Index from './pages/index/script';
-    // import Profile from './pages/profile/script';
-
     // document.getElementById('index').innerHTML = Index;
-    // document.getElementById('profile').innerHTML = Profile;
 
 }());
