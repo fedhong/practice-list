@@ -58,8 +58,8 @@ document.addEventListener('click', function (e) {
     eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId](e);
 })
 
-const createComponent = (tpl, data, events) => {
-    const html = doT.template(tpl)(data);
+const createComponent = (tpl, dataAndClass, events) => {
+    const html = doT.template(tpl)(dataAndClass);
     const container = document.createElement('div');
     container.innerHTML = html;
     const nodes = container.getElementsByTagName('*');

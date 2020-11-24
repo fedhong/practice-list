@@ -1,6 +1,7 @@
 import createComponent from '../../../../framework/createComponent';
 import tpl from './dom.html';
 import Li from '../item/script'
+import style from './style.less';
 
 const List = (props) => {
     const data = {
@@ -10,7 +11,7 @@ const List = (props) => {
         }
     }
 
-    const component = createComponent(tpl, data);
+    const component = createComponent(tpl, { data, style });
     return component;
 }
 

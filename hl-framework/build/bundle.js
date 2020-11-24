@@ -2,29 +2,32 @@
     'use strict';
 
     const createRouter = (config) => {
+
         Object.keys(config).forEach((key, i) => {
             const container = document.getElementById(key);
             container.innerHTML = config[key];
-            if (i > 0) {
-                container.style.display = 'none';
-            }
         });
 
-        if (!window.onhashchange) {
-            window.onhashchange = function () {
-                let curKey = location.hash.replace('#', '');
-                curKey = curKey || 'index';
+        function initHash() {
+            let curKey = location.hash.replace('#', '');
+            curKey = curKey || 'index';
 
-                Object.keys(config).forEach((key, i) => {
-                    const container = document.getElementById(key);
-                    if (curKey === key) {
-                        container.style.display = '';
-                    } else {
-                        container.style.display = 'none';
-                    }
-                });
-            };
+            Object.keys(config).forEach((key, i) => {
+                const container = document.getElementById(key);
+
+                if (curKey === key) {
+                    container.style.display = '';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
         }
+
+        if (!window.onhashchange) {
+            window.onhashchange = initHash;
+        }
+
+        initHash();
     };
 
     /**
@@ -87,8 +90,8 @@
         eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId](e);
     });
 
-    const createComponent = (tpl, data, events) => {
-        const html = doT.template(tpl)(data);
+    const createComponent = (tpl, dataAndClass, events) => {
+        const html = doT.template(tpl)(dataAndClass);
         const container = document.createElement('div');
         container.innerHTML = html;
         const nodes = container.getElementsByTagName('*');
@@ -99,7 +102,7 @@
         return container.innerHTML;
     };
 
-    var tpl = "<div> Hello：{{=it.name}} </div>";
+    var tpl = "<div>\n    Hello：{{=it.name}}\n</div>";
 
     const Header = (props) => {
         const data = props.data;
@@ -108,9 +111,13 @@
         return component;
     };
 
-    var tpl$1 = "<div> <ul> {{~ it.list:item}} {{=it.child(item)}} {{~}} </ul> </div>";
+    var tpl$1 = "<ul class=\"{{=it.style.list}}\">\n    {{~ it.data.list:item}}\n    {{=it.data.child(item)}}\n    {{~}}\n</ul>";
 
-    var tpl$2 = "<li id=\"{{=it.id}}\" onclick='onItemClick($event,{{=it.id}},\"{{=it.name}}\",{\"id\":{{=it.id}},\"name\":\"{{=it.name}}\"})' class=\"item\"> {{=it.name}} </li>";
+    var tpl$2 = "<li id=\"{{=it.data.id}}\" onclick='onItemClick($event,{{=it.data.id}},\"{{=it.data.name}}\",{\"id\":{{=it.data.id}},\"name\":\"{{=it.data.name}}\"})' class=\"{{=it.style.item}} {{=it.style['item-cursor']}}\">\n    {{=it.data.name}}\n</li>";
+
+    var style = {"item":"style_item__1agih","item-cursor":"style_item-cursor__1mFmw"};
+
+    console.log(style);
 
     const Li = (props) => {
         const data = props.data;
@@ -120,16 +127,18 @@
                 console.log(JSON.stringify(obj));
                 //Dom局部更新
                 data.name = 'click here';
-                const component = createComponent(tpl$2, data, events);
+                const component = createComponent(tpl$2, { data, style }, events);
 
                 //reRender
                 e.target.outerHTML = component;
             }
         };
 
-        const component = createComponent(tpl$2, data, events);
+        const component = createComponent(tpl$2, { data, style }, events);    
         return component;
     };
+
+    var style$1 = {"list":"style_list__39_H_","item":"style_item__7WMPt"};
 
     const List = (props) => {
         const data = {
@@ -139,11 +148,11 @@
             }
         };
 
-        const component = createComponent(tpl$1, data);
+        const component = createComponent(tpl$1, { data, style: style$1 });
         return component;
     };
 
-    var tpl$3 = "<div> {{=it.header}} {{=it.list}} </div> <a href=\"#profile\">详情页</a>";
+    var tpl$3 = "<div>\n    {{=it.header}}\n    {{=it.list}}\n</div>\n<a href=\"#profile\">详情页</a>";
 
     const header = Header({ data: { name: 'Fedhong' } });
     // TODO AJAX获取
@@ -162,7 +171,7 @@
 
     var Index$1 = Index();
 
-    var tpl$4 = "<div> 个人信息页面 </div> <a href=\"#index\">首页</a>&nbsp;|&nbsp;<a href=\"#\">首页</a>";
+    var tpl$4 = "<div>\n    个人信息页面\n</div>\n<a href=\"#index\">首页</a>&nbsp;|&nbsp;<a href=\"#\">首页</a>";
 
     const RouterConfig = {
         index: Index$1,

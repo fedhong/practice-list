@@ -1,7 +1,5 @@
-<div>
-    <ul>
-        {{~ it.list:item}}
-            {{=it.child(item)}}
-        {{~}}
-    </ul>
-</div>
+<ul class="{{=it.style.list}}">
+    {{~ it.data.list:item}}
+    {{=it.data.child(item)}}
+    {{~}}
+</ul>

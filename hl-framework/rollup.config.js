@@ -1,36 +1,45 @@
 import html from 'rollup-plugin-html';
 import html2 from 'rollup-plugin-html2';
-import sass from 'rollup-plugin-sass';
+import postcss from 'rollup-plugin-postcss';
 import autoprefixer from 'autoprefixer';
-import postcss from 'postcss';
 import serve from 'rollup-plugin-serve';
+import path from 'path';
+
+//TODO hash
+
+//TODO upload 
 
 export default {
-    input: 'src/app.js',
+    input: path.resolve('src/app.js'),
     output: {
-        file: 'build/bundle.js',
+        file: path.resolve('build/bundle.js'),
         format: 'iife'
     },
     plugins: [
         html({
             include: '**/*.html',
-            htmlMinifierOptions: {
-                collapseWhitespace: true,
-                collapseBooleanAttributes: true,
-                conservativeCollapse: true,
-                minifyJS: true
-            }
         }),
         html2({
-            template: './public/index.html',
+            template: path.resolve('public/index.html'),
+            externals: [{
+                file: 'bundle.css',
+                pos: 'before',
+            }]
         }),
-        sass({
-            output: 'build/bundle.css',
-            insert: false,
-            processor: css => postcss([autoprefixer])
-                .process(css)
-                .then(result => result.css)
+        postcss({
+            //inject: true,
+            //minimize: true,
+            extract: path.resolve('build/bundle.css'),
+            modules: true,
+            plugins: [autoprefixer]
         }),
+        {
+            name: 'myPlugin',
+            moduleParsed(module) {
+                // console.log('------------->start myPlugin:');
+                // console.log(module.code);
+            },
+        },
         serve({
             open: false,// Launch in browser (default: false)
             verbose: true,// Show server address in console (default: true)

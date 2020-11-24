@@ -1,6 +1,7 @@
 import createComponent from '../../../../framework/createComponent';
 import tpl from './dom.html';
-import './style.scss';
+import style from './style.less';
+console.log(style)
 
 const Li = (props) => {
     const data = props.data;
@@ -10,14 +11,14 @@ const Li = (props) => {
             console.log(JSON.stringify(obj))
             //Dom局部更新
             data.name = 'click here';
-            const component = createComponent(tpl, data, events);
+            const component = createComponent(tpl, { data, style }, events);
 
             //reRender
             e.target.outerHTML = component;
         }
     };
 
-    const component = createComponent(tpl, data, events);
+    const component = createComponent(tpl, { data, style }, events);    
     return component;
 }
 
