@@ -1,4 +1,4 @@
-./hl-framework/build/*
+./hl-framework/build
 .DS_Store
 # Logs
 logs
