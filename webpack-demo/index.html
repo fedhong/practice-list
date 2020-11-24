@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>index</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+</head>
+
+<body>
+    <h2>常用loader</h2>
+    <h3>javascript方面</h3>
+    <ul>
+        <li>"babel-core" //JavaScript编译核心babel-core（必须）</li>
+        <li>"babel-loader" //JavaScript编译babel-loader（必须）</li>
+        <li>"babel-plugin-transform-runtime" //JavaScript 运行环境转换器</li>
+        <li>"babel-preset-stage-0" //ES6,ES7语法转换ES5编译器（ES7的提案，且包含了stage-2，stage-1所有功能）</li>
+        <li>"babel-polyfill" //IE低版本扩展JS某些API（如promise object.defindproperty）（根据项目需求是否兼容IE低版本安装）</li>
+        <li>"babel-runtime" //提供将ES6转变成ES5运行环境,并不污染全局完成代码填充</li>
+        <li>"babel-plugin-transform-decorators-legacy" //JavaScript 装饰器语法编译器（使用@语法需添加）</li>
+        <li>"babel-plugin-transform-react-jsx" //react jsx语法转换器</li>
+        <li>"babel-plugin-react-html-attrs" //react dom属性识别语法转换器</li>
+        <li>"babel-preset-react" //react语法编译器</li>
+    </ul>
+
+    <h3>CSS方面</h3>
+    <ul>
+        <li>"style-loader" //样式loader（必须）</li>
+        <li>"css-loader" //css-loader （必须）</li>
+        <li>"autoprefixer" //css3自动补全功能</li>
+        <li>"postcss-cssnext" //利用cssnext 额外增加的一些 css 规范</li>
+        <li>"postcss-loader"</li>
+        <li>"less": //以下都是使用less相关语法加载库</li>
+        <li>"less-loader"</li>
+        <li>"node-sass": "^4.5.3", //以下都是使用sass，scss相关语法加载库</li>
+        <li>"sass-loader": "^6.0.6"</li>
+    </ul>
+
+    <h3>资源文件</h3>
+    <ul>
+        <li>"file-loader" 文件处理loader</li>
+        <li>"url-loader" url链接处理loader</li>
+    </ul>
+
+    <h2>常用plugin</h2>
+
+    <ul>
+        <li>HtmlWebpackPlugin 模板生成HTML并链接入口js插件</li>
+        <li>inline-manifest-webpack-plugin manifest 缓存配置插件</li>
+        <li>copy-webpack-plugin 文件拷贝插件</li>
+        <li>dotenv-webpack 环境变量载入插件</li>
+        <li>webpack-parallel-uglify-plugin js压缩插件</li>
+        <li>optimize-css-assets-webpack-plugin css提取插件</li>
+        <li>mini-css-extract-plugin css压缩插件</li>
+    </ul>
+
+    <div id="root"></div>
+</body>
+
+</html>
