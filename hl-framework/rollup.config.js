@@ -1,9 +1,10 @@
+import path from 'path';
 import html from 'rollup-plugin-html';
 import html2 from 'rollup-plugin-html2';
 import postcss from 'rollup-plugin-postcss';
 import autoprefixer from 'autoprefixer';
+import copy from 'rollup-plugin-copy';
 import serve from 'rollup-plugin-serve';
-import path from 'path';
 
 //TODO hash
 
@@ -32,6 +33,11 @@ export default {
             extract: path.resolve('build/bundle.css'),
             modules: true,
             plugins: [autoprefixer]
+        }),
+        copy({
+            targets: [
+                { src: path.resolve('src/assets/*'), dest: path.resolve('build/assets') }
+            ]
         }),
         {
             name: 'myPlugin',
