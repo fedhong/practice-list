@@ -1,1 +1,0 @@
-// http://codewars.com/
