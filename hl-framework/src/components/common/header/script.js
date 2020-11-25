@@ -4,7 +4,7 @@ import tpl from './dom.html';
 const Header = (props) => {
     const data = props.data;
 
-    const component = createComponent(tpl, data);
+    const component = createComponent(tpl, { data });
     return component;
 }
 

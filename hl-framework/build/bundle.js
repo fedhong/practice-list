@@ -102,18 +102,27 @@
         return container.innerHTML;
     };
 
-    var tpl = "<div>\r\n    Hello：{{=it.name}}\r\n</div>";
+    var tpl = "<div>\n    Hello：{{=it.data.name}}\n</div>";
 
     const Header = (props) => {
         const data = props.data;
 
-        const component = createComponent(tpl, data);
+        const component = createComponent(tpl, { data });
         return component;
     };
 
-    var tpl$1 = "<ul class=\"{{=it.style.list}}\">\r\n    {{~ it.data.list:item}}\r\n    {{=it.data.child(item)}}\r\n    {{~}}\r\n</ul>";
+    var tpl$1 = "<div>\n    <a href=\"#index\">首页</a>&nbsp;|&nbsp;<a href=\"#profile\">详情页</a>\n</div>";
 
-    var tpl$2 = "<li id=\"{{=it.data.id}}\" onclick='onItemClick($event,{{=it.data.id}},\"{{=it.data.name}}\",{\"id\":{{=it.data.id}},\"name\":\"{{=it.data.name}}\"})' class=\"{{=it.style.item}} {{=it.style['item-cursor']}}\">\r\n    {{=it.data.name}}\r\n</li>";
+    const Footer = (props) => {
+        const data = {};
+
+        const component = createComponent(tpl$1, data);
+        return component;
+    };
+
+    var tpl$2 = "<ul class=\"{{=it.style.list}}\">\n    {{~ it.data.list:item}}\n    {{=it.data.child(item)}}\n    {{~}}\n</ul>";
+
+    var tpl$3 = "<li id=\"{{=it.data.id}}\" onclick='onItemClick($event,{{=it.data.id}},\"{{=it.data.name}}\",{\"id\":{{=it.data.id}},\"name\":\"{{=it.data.name}}\"})' class=\"{{=it.style.item}} {{=it.style['item-cursor']}}\">\n    {{=it.data.name}}\n</li>";
 
     var style = {"item":"style_item__1agih","item-cursor":"style_item-cursor__1mFmw"};
 
@@ -125,14 +134,14 @@
                 console.log(JSON.stringify(obj));
                 //Dom局部更新
                 data.name = 'click here';
-                const component = createComponent(tpl$2, { data, style }, events);
+                const component = createComponent(tpl$3, { data, style }, events);
 
                 //reRender
                 e.target.outerHTML = component;
             }
         };
 
-        const component = createComponent(tpl$2, { data, style }, events);    
+        const component = createComponent(tpl$3, { data, style }, events);    
         return component;
     };
 
@@ -146,35 +155,43 @@
             }
         };
 
-        const component = createComponent(tpl$1, { data, style: style$1 });
+        const component = createComponent(tpl$2, { data, style: style$1 });
         return component;
     };
 
-    var tpl$3 = "<div>\r\n    {{=it.header}}\r\n    {{=it.list}}\r\n</div>\r\n<a href=\"#profile\">详情页</a>";
+    var tpl$4 = "<div>\n    {{=it.data.header}}\n    {{=it.data.list}}\n    {{=it.data.footer}}\n</div>";
 
     const header = Header({ data: { name: 'Fedhong' } });
+    const footer = Footer();
     // TODO AJAX获取
     const list = List({ data: [{ id: 1, name: 'AA,AAA,AA' }, { id: 2, name: 'BBBBBBBB' }, { id: 3, name: 'CCCCCCCC' }] });
 
     const Index = (props) => {
         const data = {
             header,
-            list
+            list,
+            footer
         };
 
-        const component = createComponent(tpl$3, data);
+        const component = createComponent(tpl$4, { data });
 
         return component;
     };
 
-    var tpl$4 = "<div>\r\n    <div class=\"{{=it.style.photo}}\"></div>个人信息页面\r\n</div>\r\n<div>\r\n    <img src=\"assets/img/a.jpeg\">\r\n</div>\r\n<a href=\"#index\">首页</a>";
+    var tpl$5 = "{{=it.data.header}}\n<div>\n    <div class=\"{{=it.style.photo}}\"></div>个人信息页面\n</div>\n<div>\n    <img src=\"assets/img/a.jpeg\">\n</div>\n{{=it.data.footer}}";
 
     var style$2 = {"photo":"style_photo__r_-zJ"};
 
+    const header$1 = Header({ data: { name: 'Fedhong' } });
+    const footer$1 = Footer();
+
     const profile = (props) => {
-        const data = {};
+        const data = {
+            header: header$1,
+            footer: footer$1
+        };
         const events = {};
-        const component = createComponent(tpl$4, { data, style: style$2 }, events);
+        const component = createComponent(tpl$5, { data, style: style$2 }, events);
 
         return component;
     };
