@@ -5,6 +5,7 @@ import postcss from 'rollup-plugin-postcss';
 import autoprefixer from 'autoprefixer';
 import copy from 'rollup-plugin-copy';
 import serve from 'rollup-plugin-serve';
+import pxtovw from 'postcss-px-to-viewport'
 
 //TODO hash
 
@@ -32,7 +33,15 @@ export default {
             //minimize: true,
             extract: path.resolve('build/bundle.css'),
             modules: true,
-            plugins: [autoprefixer]
+            plugins: [autoprefixer, pxtovw({
+                viewportWidth: 750, // (Number) The width of the viewport.
+                // viewportHeight: 1334, // (Number) The height of the viewport.
+                unitPrecision: 3, // (Number) The decimal numbers to allow the REM units to grow to.
+                viewportUnit: 'vw', // (String) Expected units.
+                selectorBlackList: ['.ignore', '.hairlines'], // (Array) The selectors to ignore and leave as px.
+                minPixelValue: 1, // (Number) Set the minimum pixel value to replace.
+                mediaQuery: false, // (Boolean) Allow px to be converted in media queries.
+            })]
         }),
         copy({
             targets: [
@@ -51,10 +60,7 @@ export default {
             verbose: true,// Show server address in console (default: true)
             contentBase: ['build'],// Multiple folders to serve from
             host: 'localhost',
-            port: 10001,
-            proxy: {
-                api: 'http://localhost:8181'
-            },
+            port: 10001            
         }),
     ]
 };

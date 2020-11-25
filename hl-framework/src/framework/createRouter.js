@@ -2,7 +2,10 @@ const createRouter = (config) => {
 
     Object.keys(config).forEach((key, i) => {
         const container = document.getElementById(key);
-        container.innerHTML = config[key];
+        if (container) {
+            container.innerHTML = config[key];
+            container.style.display = 'none';
+        }
     })
 
     function initHash() {
@@ -11,11 +14,12 @@ const createRouter = (config) => {
 
         Object.keys(config).forEach((key, i) => {
             const container = document.getElementById(key);
-
-            if (curKey === key) {
-                container.style.display = '';
-            } else {
-                container.style.display = 'none';
+            if (container) {
+                if (curKey === key) {
+                    container.style.display = '';
+                } else {
+                    container.style.display = 'none';
+                }
             }
         })
     }

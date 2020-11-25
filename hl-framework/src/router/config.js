@@ -3,7 +3,7 @@ import Profile from '../pages/profile/script'
 
 const RouterConfig = {
     index: Index(),
-    profile: Profile()
+    profile: Profile(),
 };
 
 export default RouterConfig;
