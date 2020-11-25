@@ -5,7 +5,10 @@
 
         Object.keys(config).forEach((key, i) => {
             const container = document.getElementById(key);
-            container.innerHTML = config[key];
+            if (container) {
+                container.innerHTML = config[key];
+                container.style.display = 'none';
+            }
         });
 
         function initHash() {
@@ -14,11 +17,12 @@
 
             Object.keys(config).forEach((key, i) => {
                 const container = document.getElementById(key);
-
-                if (curKey === key) {
-                    container.style.display = '';
-                } else {
-                    container.style.display = 'none';
+                if (container) {
+                    if (curKey === key) {
+                        container.style.display = '';
+                    } else {
+                        container.style.display = 'none';
+                    }
                 }
             });
         }
@@ -102,21 +106,25 @@
         return container.innerHTML;
     };
 
-    var tpl = "<div>\n    Hello：{{=it.data.name}}\n</div>";
+    var tpl = "<div class=\"{{=it.style.welcome}}\">\n    Welcome to hl-framework：{{=it.data.name}}\n</div>";
+
+    var style = {"welcome":"style_welcome__3EYCC"};
 
     const Header = (props) => {
         const data = props.data;
 
-        const component = createComponent(tpl, { data });
+        const component = createComponent(tpl, { data, style });
         return component;
     };
 
-    var tpl$1 = "<div>\n    <a href=\"#index\">首页</a>&nbsp;|&nbsp;<a href=\"#profile\">详情页</a>\n</div>";
+    var tpl$1 = "<div class=\"{{=it.style.footer}}\">\n    <a href=\"#index\">首页</a>&nbsp;|&nbsp;<a href=\"#profile\">详情页</a>\n</div>";
+
+    var style$1 = {"footer":"style_footer__26q8n"};
 
     const Footer = (props) => {
         const data = {};
 
-        const component = createComponent(tpl$1, data);
+        const component = createComponent(tpl$1, { data, style: style$1 });
         return component;
     };
 
@@ -124,7 +132,7 @@
 
     var tpl$3 = "<li id=\"{{=it.data.id}}\" onclick='onItemClick($event,{{=it.data.id}},\"{{=it.data.name}}\",{\"id\":{{=it.data.id}},\"name\":\"{{=it.data.name}}\"})' class=\"{{=it.style.item}} {{=it.style['item-cursor']}}\">\n    {{=it.data.name}}\n</li>";
 
-    var style = {"item":"style_item__1agih","item-cursor":"style_item-cursor__1mFmw"};
+    var style$2 = {"item":"style_item__1agih","item-cursor":"style_item-cursor__1mFmw"};
 
     const Li = (props) => {
         const data = props.data;
@@ -134,18 +142,18 @@
                 console.log(JSON.stringify(obj));
                 //Dom局部更新
                 data.name = 'click here';
-                const component = createComponent(tpl$3, { data, style }, events);
+                const component = createComponent(tpl$3, { data, style: style$2 }, events);
 
                 //reRender
                 e.target.outerHTML = component;
             }
         };
 
-        const component = createComponent(tpl$3, { data, style }, events);    
+        const component = createComponent(tpl$3, { data, style: style$2 }, events);    
         return component;
     };
 
-    var style$1 = {"list":"style_list__39_H_","item":"style_item__7WMPt"};
+    var style$3 = {"list":"style_list__39_H_","item":"style_item__7WMPt"};
 
     const List = (props) => {
         const data = {
@@ -155,7 +163,7 @@
             }
         };
 
-        const component = createComponent(tpl$2, { data, style: style$1 });
+        const component = createComponent(tpl$2, { data, style: style$3 });
         return component;
     };
 
@@ -178,27 +186,27 @@
         return component;
     };
 
-    var tpl$5 = "{{=it.data.header}}\n<div>\n    <div class=\"{{=it.style.photo}}\"></div>个人信息页面\n</div>\n<div>\n    <img src=\"assets/img/a.jpeg\">\n</div>\n{{=it.data.footer}}";
+    var tpl$5 = "{{=it.data.header}}\n<div class=\"{{=it.style.user}}\">\n    <div class=\"{{=it.style.photo}}\"></div>一只小龙虾\n</div>\n<div>\n    <img src=\"assets/img/a.jpeg\">\n</div>\n{{=it.data.footer}}";
 
-    var style$2 = {"photo":"style_photo__r_-zJ"};
+    var style$4 = {"user":"style_user__ALLkF","photo":"style_photo__r_-zJ"};
 
     const header$1 = Header({ data: { name: 'Fedhong' } });
     const footer$1 = Footer();
 
-    const profile = (props) => {
+    const Profile = (props) => {
         const data = {
             header: header$1,
             footer: footer$1
         };
         const events = {};
-        const component = createComponent(tpl$5, { data, style: style$2 }, events);
+        const component = createComponent(tpl$5, { data, style: style$4 }, events);
 
         return component;
     };
 
     const RouterConfig = {
         index: Index(),
-        profile: profile()
+        profile: Profile(),
     };
 
     createRouter(RouterConfig);

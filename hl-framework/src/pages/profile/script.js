@@ -7,7 +7,7 @@ import style from './style.less';
 const header = Header({ data: { name: 'Fedhong' } });
 const footer = Footer();
 
-const profile = (props) => {
+const Profile = (props) => {
     const data = {
         header,
         footer
@@ -18,4 +18,4 @@ const profile = (props) => {
     return component;
 }
 
-export default profile;
+export default Profile;

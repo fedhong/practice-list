@@ -13,6 +13,7 @@
     "autoprefixer": "^8.6.5",
     "less": "^3.12.2",
     "postcss": "^8.1.10",
+    "postcss-px-to-viewport": "^1.1.1",
     "rollup": "^2.33.3",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-html": "^0.2.1",
