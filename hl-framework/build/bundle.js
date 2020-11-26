@@ -48,6 +48,17 @@
         onclick: {}
     };
 
+    const genUniqueId = (type) => {
+        const CRC_TAB = ['F', '_', 'E', 'd', 'H', 'o', 'N', 'g', 'V', '5'];
+        const current = `${Object.keys(eventsBus[type]).length + 1}`.split('');
+        const res = [];
+        for (let i = 0, l = current.length; i < l; i++) {
+            res.push(CRC_TAB[current[i]]);
+        }
+
+        return `${type}_${res.join('_')}`;
+    };
+
     const bindEvent = (node, type, events = {}) => {
         if (node[type]) {
             let strName = '';
@@ -65,7 +76,7 @@
             }
             Object.keys(events).forEach(key => {
                 if (key === strName) {
-                    const uniqueId = `${type}_${Object.keys(eventsBus[type]).length + 1}`;
+                    const uniqueId = genUniqueId(type);
                     node.setAttribute(DATA_EVENT_UNIQUE_ID_KEY, uniqueId);
                     if (strParams) {
                         const hasEventArg = strParams.indexOf($EVENT) === 0;
