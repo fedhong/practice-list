@@ -133,7 +133,7 @@
         return container.innerHTML;
     };
 
-    var tpl = "<div class=\"{{=it.style.welcome}}\">\n    Welcome to hl-framework：{{=it.data.name}}\n</div>";
+    var tpl = "<div class=\"{{=it.style.welcome}}\">\r\n    Welcome to hl-framework：{{=it.data.name}}\r\n</div>";
 
     var style = {"welcome":"style_welcome__3EYCC"};
 
@@ -144,7 +144,7 @@
         return component;
     };
 
-    var tpl$1 = "<div class=\"{{=it.style.footer}}\">\n    <a href=\"#index\">首页</a>&nbsp;|&nbsp;<a href=\"#profile\">详情页</a>\n</div>";
+    var tpl$1 = "<div class=\"{{=it.style.footer}}\">\r\n    <a href=\"#index\">首页</a>&nbsp;|&nbsp;<a href=\"#profile\">详情页</a>\r\n</div>";
 
     var style$1 = {"footer":"style_footer__26q8n"};
 
@@ -155,9 +155,9 @@
         return component;
     };
 
-    var tpl$2 = "<ul class=\"{{=it.style.list}}\">\n    {{~ it.data.list:item}}\n    {{=it.data.child(item)}}\n    {{~}}\n</ul>";
+    var tpl$2 = "<ul class=\"{{=it.style.list}}\">\r\n    {{~ it.data.list:item}}\r\n    {{=it.data.child(item)}}\r\n    {{~}}\r\n</ul>";
 
-    var tpl$3 = "<li id=\"{{=it.data.id}}\" onclick='onItemClick($event,{{=it.data.id}},\"{{=it.data.name}}\",{\"id\":{{=it.data.id}},\"name\":\"{{=it.data.name}}\"})' class=\"{{=it.style.item}} {{=it.style['item-cursor']}}\">\n    {{=it.data.name}}\n</li>";
+    var tpl$3 = "<li id=\"{{=it.data.id}}\" onclick='onItemClick($event,{{=it.data.id}},\"{{=it.data.name}}\",{\"id\":{{=it.data.id}},\"name\":\"{{=it.data.name}}\"})' class=\"{{=it.style.item}} {{=it.style['item-cursor']}}\">\r\n    {{=it.data.name}}\r\n</li>";
 
     var style$2 = {"item":"style_item__1agih","item-cursor":"style_item-cursor__1mFmw"};
 
@@ -194,7 +194,7 @@
         return component;
     };
 
-    var tpl$4 = "<div>\n    {{=it.data.header}}\n    {{=it.data.list}}\n    {{=it.data.footer}}\n</div>";
+    var tpl$4 = "<div>\r\n    {{=it.data.header}}\r\n    {{=it.data.list}}\r\n    {{=it.data.footer}}\r\n</div>";
 
     const header = Header({ data: { name: 'Fedhong' } });
     const footer = Footer();
@@ -213,7 +213,7 @@
         return component;
     };
 
-    var tpl$5 = "{{=it.data.header}}\n<div class=\"{{=it.style.user}}\">\n    <div class=\"{{=it.style.photo}}\"></div>一只小龙虾\n</div>\n<div>\n    <img src=\"assets/img/a.jpeg\">\n</div>\n{{=it.data.footer}}";
+    var tpl$5 = "{{=it.data.header}}\r\n<div class=\"{{=it.style.user}}\">\r\n    <div class=\"{{=it.style.photo}}\"></div>一只小龙虾\r\n</div>\r\n<div>\r\n    <img src=\"assets/img/a.jpeg\">\r\n</div>\r\n{{=it.data.footer}}";
 
     var style$4 = {"user":"style_user__ALLkF","photo":"style_photo__r_-zJ"};
 
