@@ -1,11 +1,11 @@
 import path from 'path';
 import html from 'rollup-plugin-html';
 import html2 from 'rollup-plugin-html2';
-import postcss from 'rollup-plugin-postcss';
-import autoprefixer from 'autoprefixer';
 import copy from 'rollup-plugin-copy';
-import serve from 'rollup-plugin-serve';
+import postcss from 'rollup-plugin-postcss';
 import pxtovw from 'postcss-px-to-viewport'
+import autoprefixer from 'autoprefixer';
+import dev from 'rollup-plugin-dev';
 
 //TODO hash
 
@@ -55,12 +55,14 @@ export default {
                 // console.log(module.code);
             },
         },
-        serve({
-            open: false,// Launch in browser (default: false)
-            verbose: true,// Show server address in console (default: true)
-            contentBase: ['build'],// Multiple folders to serve from
+        dev({
+            force: true,
+            dirs: ['build'],
             host: 'localhost',
-            port: 10001            
+            port: 10001,
+            proxy: {
+                '/baidu/*': 'http://www.baidu.com/'
+            }
         }),
     ]
 };
