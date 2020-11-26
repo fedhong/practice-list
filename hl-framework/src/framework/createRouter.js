@@ -1,5 +1,5 @@
 const createRouter = (config) => {
-
+    let begin = Date.now();
     Object.keys(config).forEach((key, i) => {
         const container = document.getElementById(key);
         if (container) {
@@ -29,6 +29,7 @@ const createRouter = (config) => {
     }
 
     initHash();
+    console.log(`渲染耗时：${Date.now() - begin} ms`)
 };
 
 export default createRouter

@@ -2,7 +2,7 @@
     'use strict';
 
     const createRouter = (config) => {
-
+        let begin = Date.now();
         Object.keys(config).forEach((key, i) => {
             const container = document.getElementById(key);
             if (container) {
@@ -32,6 +32,7 @@
         }
 
         initHash();
+        console.log(`渲染耗时：${Date.now() - begin} ms`);
     };
 
     /**
@@ -68,19 +69,21 @@
                     node.setAttribute(DATA_EVENT_UNIQUE_ID_KEY, uniqueId);
                     if (strParams) {
                         const hasEventArg = strParams.indexOf($EVENT) === 0;
+
                         if (hasEventArg) {
                             strParams = strParams.replace($EVENT, '');
                         }
+
                         eventsBus[type][uniqueId] = function (e) {
                             const args = eval2(`[${strParams}]`);
                             if (hasEventArg) {
                                 args[0] = e;
                             }
-                            events[key](...args);
+                            return events[key](...args);
                         };
                     } else {
                         eventsBus[type][uniqueId] = function (e) {
-                            events[key](e);
+                            return events[key](e);
                         };
                     }
                 }
@@ -90,8 +93,21 @@
     };
 
     document.addEventListener('click', function (e) {
-        const uniqueId = e.target.getAttribute(DATA_EVENT_UNIQUE_ID_KEY);
-        eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId](e);
+
+        const list = [];
+        let cur = e.target;
+        while (cur.tagName !== 'HTML') {
+            const uniqueId = cur.getAttribute(DATA_EVENT_UNIQUE_ID_KEY);
+            uniqueId && list.push(uniqueId);
+            cur = cur.parentNode;
+        }
+        for (let i = 0, l = list.length; i < l; i++) {
+            const uniqueId = list[i];
+            const bubbling = eventsBus[ON_CLICK][uniqueId] && eventsBus[ON_CLICK][uniqueId](e);
+            if (bubbling === false) {
+                break;
+            }
+        }
     });
 
     const createComponent = (tpl, dataAndClass, events) => {
