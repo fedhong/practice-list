@@ -11,7 +11,7 @@ const eventsBus = {
     onclick: {}
 };
 
-const genUniqueId = (type) => {
+const _genUniqueId = (type) => {
     const CRC_TAB = ['F', '_', 'E', 'd', 'H', 'o', 'N', 'g', 'V', '5'];
     const current = `${Object.keys(eventsBus[type]).length + 1}`.split('');
     const res = [];
@@ -22,7 +22,7 @@ const genUniqueId = (type) => {
     return `${type}_${res.join('_')}`;
 }
 
-const bindEvent = (node, type, events = {}) => {
+const _bindEvent = (node, type, events = {}) => {
     if (node[type]) {
         let strName = '';
         let strParams = '';
@@ -39,7 +39,7 @@ const bindEvent = (node, type, events = {}) => {
         }
         Object.keys(events).forEach(key => {
             if (key === strName) {
-                const uniqueId = genUniqueId(type);
+                const uniqueId = _genUniqueId(type);
                 node.setAttribute(DATA_EVENT_UNIQUE_ID_KEY, uniqueId);
                 if (strParams) {
                     const hasEventArg = strParams.indexOf($EVENT) === 0;
@@ -90,7 +90,7 @@ const createComponent = (tpl, dataAndClass, events) => {
     container.innerHTML = html;
     const nodes = container.getElementsByTagName('*');
     for (let i = 0, l = nodes.length; i < l; i++) {
-        bindEvent(nodes[i], ON_CLICK, events);
+        _bindEvent(nodes[i], ON_CLICK, events);
     }
 
     return container.innerHTML;
