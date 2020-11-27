@@ -17,6 +17,9 @@ export default {
         file: path.resolve('build/bundle.js'),
         format: 'iife'
     },
+    watch: {
+        exclude: ['node_modules/**']
+    },
     plugins: [
         html({
             include: '**/*.html',
