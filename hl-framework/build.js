@@ -126,28 +126,41 @@ const crypto = require('crypto');
 const fs = require('fs');
 
 async function deploy() {
+
+
     console.log('start deploy');
-    readDirSync('./build');
+
+    const replaceMap = {};
+
+    const buildPath = './build';
+    readDirSync(buildPath);
+    console.log(replaceMap);
+
+
+    function readDirSync(path) {
+
+        const paths = fs.readdirSync(path);
+        paths.forEach(function (item, index) {
+            const absolutePath = path + "/" + item;
+            const info = fs.statSync(absolutePath)
+
+            if (info.isDirectory()) {
+                readDirSync(absolutePath);
+            } else {
+                //读取一个Buffer
+                const buffer = fs.readFileSync(absolutePath);
+                const fsHash = crypto.createHash('md5');
+                fsHash.update(buffer);
+                const md5 = fsHash.digest('hex');
+                console.log("文件%s的MD5是：%s", absolutePath, md5);
+
+                replaceMap[item] = `${item}_${md5}`;
+            }
+        })
+    }
 }
 
-function readDirSync(path) {
-    var paths = fs.readdirSync(path);
-    paths.forEach(function (item, index) {
-        var absolutePath = path + "/" + item;
-        var info = fs.statSync(absolutePath)
 
-        if (info.isDirectory()) {
-            readDirSync(path + "/" + item);
-        } else {
-            //读取一个Buffer
-            var buffer = fs.readFileSync(absolutePath);
-            var fsHash = crypto.createHash('md5');
-            fsHash.update(buffer);
-            var md5 = fsHash.digest('hex');
-            console.log("文件%s的MD5是：%s", absolutePath, md5);
-        }
-    })
-}
 
 /**
  * 
@@ -158,3 +171,9 @@ function readDirSync(path) {
     await deploy();
     console.log('2');
 })();
+
+
+
+
+
+
