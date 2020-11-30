@@ -30,7 +30,8 @@ function _dataFormat(data, method, dataType) {
         })
         return res.join('&');
     } else {
-        //TODO 测试POST form格式
+        //TODO POST的x-www-form-urlencoded支持
+        //TODO POST的FormData支持
         return JSON.stringify(data);
     }
 }
@@ -130,4 +131,8 @@ function jsonp(config) {
     });
 }
 
-export { get, post, jsonp };
+function ajax(config) {
+    return _createAjax(config)
+}
+
+export { get, post, jsonp, ajax };
