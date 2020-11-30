@@ -22,15 +22,17 @@ function _urlFormat(url, data, method, dataType) {
     return url;
 }
 
-function _dataFormat(data, method, dataType) {
-    if (method === 'GET' || dataType.toUpperCase() === 'JSONP') {
+function _dataFormat(data, method, dataType, headers = {}) {
+
+    const contentType = headers['content-type'] || headers['Content-Type'] || '';
+
+    if (method === 'GET' || dataType.toUpperCase() === 'JSONP' || contentType.toLowerCase() === 'application/x-www-form-urlencoded') {
         const res = [];
         Object.keys(data).forEach(key => {
             res.push(`${key}=${data[key]}`);
         })
         return res.join('&');
     } else {
-        //TODO POST的x-www-form-urlencoded支持
         //TODO POST的FormData支持
         return JSON.stringify(data);
     }
@@ -41,7 +43,7 @@ function _createAjax(config) {
 
         let { url, method = 'GET', data = {}, dataType = '', timeout, headers, async = true } = config;
         method = method.toUpperCase();
-        data = _dataFormat(data, method, dataType);
+        data = _dataFormat(data, method, dataType, headers);
         url = _urlFormat(url, data, method, dataType);
 
         if (dataType.toUpperCase() === 'JSONP') {
