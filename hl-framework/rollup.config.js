@@ -1,7 +1,7 @@
 import path from 'path';
 import html from 'rollup-plugin-html';
 import html2 from 'rollup-plugin-html2';
-import { terser } from "rollup-plugin-terser";
+import { terser } from 'rollup-plugin-terser';
 import copy from 'rollup-plugin-copy';
 import postcss from 'rollup-plugin-postcss';
 import pxtovw from 'postcss-px-to-viewport'
