@@ -26,9 +26,9 @@ const _bindEvent = (node, type, events = {}) => {
     if (node[type]) {
         let strName = '';
         let strParams = '';
-        const eventHandler = node.getAttribute(type).trim();// TODO trim        
+        const eventHandler = node.getAttribute(type).replace(/^\s+|\s+$/gm, '');
 
-        if (eventHandler.endsWith(')')) {// TODO endsWith
+        if (eventHandler.substring(eventHandler.length - 1) === ')') {
             //传递参数
             const index = eventHandler.indexOf('(');
             strName = eventHandler.substring(0, index);
