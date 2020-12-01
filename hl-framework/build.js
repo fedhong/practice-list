@@ -1,6 +1,7 @@
 const rollup = require('rollup');
 
 const path = require('path');
+const cleaner = require('rollup-plugin-cleaner');
 const html = require('rollup-plugin-html');
 const html2 = require('rollup-plugin-html2');
 const { terser } = require('rollup-plugin-terser');
@@ -22,6 +23,11 @@ const config = {
         exclude: ['node_modules/**']
     },
     plugins: [
+        cleaner({
+            targets: [
+                './build/'
+            ]
+        }),
         html({
             include: '**/*.html',
         }),
@@ -32,10 +38,10 @@ const config = {
                 pos: 'before',
             }]
         }),
-        terser(),
+        // terser(),
         postcss({
             //inject: true,
-            minimize: true,
+            // minimize: true,
             extract: path.resolve('build/bundle.css'),
             modules: true,
             plugins: [autoprefixer, pxtovw({
@@ -116,14 +122,20 @@ async function build() {
     }
 }
 
-
-
 /**
  * 
  */
 
 const crypto = require('crypto');
 const fs = require('fs');
+
+const uploadEnv = 'dev';
+const cdnURL = `//www.baidu.com/static/${uploadEnv}`;
+
+const _upload = (filePath) => {
+    //TODO 上传文件
+
+}
 
 const _md5 = (filePath) => {
     const buffer = fs.readFileSync(filePath);
@@ -133,11 +145,12 @@ const _md5 = (filePath) => {
     return md5;
 }
 
+
 async function deploy() {
 
     console.log('start deploy');
 
-    // 1、MD5静态资源并上传CDN
+    // 1、对静态资源文件进行MD5并上传CDN
     const assetMap = {};
     const assetPath = './build/assets';
     (function md5Assets(path) {
@@ -152,18 +165,43 @@ async function deploy() {
                 const md5 = _md5(absolutePath);
                 const newName = item.replace(/\./, `_${md5}.`);
                 assetMap[item] = newName;
-                //TODO rename,上传CDN
+
+                //md5后的文件名
+                const md5FilePath = `${path}/${newName}`;
+                //rename                
+                fs.renameSync(absolutePath, md5FilePath);
+                //上传CDN
+                _upload(md5FilePath);
             }
         })
     })(assetPath);
     console.log(assetMap);
-    //TODO 2、替换css、js引用；
 
-    // 3、MD5 css和js并上传CDN
+    // 2、替换css、js文件中，对静态资源的引用
+    const cssAndJsPath = './build/';
+    (function replaceCssAndJs(path) {
+        const paths = fs.readdirSync(path);
+        paths.forEach(function (item, index) {
+            const absolutePath = `${path}/${item}`;
+            const info = fs.statSync(absolutePath)
+
+            if (!info.isDirectory() && (item.endsWith('.css') || item.endsWith('.js'))) {
+                let file = fs.readFileSync(absolutePath, 'utf-8');
+                Object.keys(assetMap).forEach(key => {
+                    const reg = new RegExp(`assets\\/[\\w\\-\\/]*${key}`, 'g');
+                    file = file.replace(reg, `${cdnURL}/${key.substring(key.lastIndexOf('.') + 1)}/${assetMap[key]}`);
+                });
+                fs.writeFileSync(absolutePath, file, 'utf-8');
+            }
+        })
+    })(cssAndJsPath);
+
+
+    // 3、对css文件和js文件进行MD5并上传CDN
     const cssMap = {};
     const jsMap = {};
     const buildPath = './build';
-    (function md5BuildResult(path) {
+    (function md5CssAndJs(path) {
         const paths = fs.readdirSync(path);
         paths.forEach(function (item, index) {
             const absolutePath = `${path}/${item}`;
@@ -172,9 +210,9 @@ async function deploy() {
             if (!info.isDirectory()) {
                 const md5 = _md5(absolutePath);
                 const newName = item.replace(/\./, `_${md5}.`);
-                newName.endsWith('.css') && (cssMap[item] = newName);
-                newName.endsWith('.js') && (jsMap[item] = newName);
-                //TODO rename,上传CDN
+                const md5FilePath = `${path}/${newName}`;
+                newName.endsWith('.css') && (cssMap[item] = newName, fs.renameSync(absolutePath, md5FilePath), _upload(md5FilePath));
+                newName.endsWith('.js') && (jsMap[item] = newName, fs.renameSync(absolutePath, md5FilePath), _upload(md5FilePath));
             }
         })
     })(buildPath);
@@ -182,18 +220,20 @@ async function deploy() {
     console.log(cssMap);
     console.log(jsMap);
 
-    // 4、替换html引用
-    let html = fs.readFileSync('./build/index.html', 'utf-8');
-    Object.keys(cssMap).forEach(key => {
-        html = html.replace(key, cssMap[key]);
-    });
-    Object.keys(jsMap).forEach(key => {
-        html = html.replace(key, jsMap[key]);
-    });
-    fs.writeFileSync('./build/index.html', html, 'utf-8');
+    // 4、替换html文件中，对静态资源、css、js的引用
+    const htmlPath = './build/index.html';
+    (function replaceHTML(path) {
+        let html = fs.readFileSync(path, 'utf-8');
+        [assetMap, cssMap, jsMap].forEach(item => {
+            Object.keys(item).forEach(key => {
+                const reg = new RegExp(`assets\\/[\\w\\-\\/]*${key}`, 'g');
+                html = html.replace(reg, `${cdnURL}/${key.substring(key.lastIndexOf('.') + 1)}/${item[key]}`);
+                html = html.replace(key, `${cdnURL}/${key.substring(key.lastIndexOf('.') + 1)}/${item[key]}`);
+            });
+        })
+        fs.writeFileSync(path, html, 'utf-8');
+    })(htmlPath)
 }
-
-
 
 /**
  * 
@@ -206,9 +246,3 @@ async function deploy() {
     console.log('---------------> end');
     console.timeEnd('use time');
 })();
-
-
-
-
-
-
