@@ -129,8 +129,7 @@ async function build() {
 const crypto = require('crypto');
 const fs = require('fs');
 
-const uploadEnv = 'dev';
-const cdnURL = `//www.baidu.com/static/${uploadEnv}`;
+const cdnURL = ''
 
 const _upload = (filePath) => {
     //TODO 上传文件
@@ -188,8 +187,12 @@ async function deploy() {
             if (!info.isDirectory() && (item.endsWith('.css') || item.endsWith('.js'))) {
                 let file = fs.readFileSync(absolutePath, 'utf-8');
                 Object.keys(assetMap).forEach(key => {
-                    const reg = new RegExp(`assets\\/[\\w\\-\\/]*${key}`, 'g');
-                    file = file.replace(reg, `${cdnURL}/${key.substring(key.lastIndexOf('.') + 1)}/${assetMap[key]}`);
+                    if (cdnURL) {
+                        const reg = new RegExp(`assets\\/[\\w\\-\\/]*${key}`, 'g');
+                        file = file.replace(reg, `${cdnURL}/${assetMap[key]}`);
+                    } else {
+                        file = file.replace(key, assetMap[key]);
+                    }
                 });
                 fs.writeFileSync(absolutePath, file, 'utf-8');
             }
@@ -226,9 +229,14 @@ async function deploy() {
         let html = fs.readFileSync(path, 'utf-8');
         [assetMap, cssMap, jsMap].forEach(item => {
             Object.keys(item).forEach(key => {
-                const reg = new RegExp(`assets\\/[\\w\\-\\/]*${key}`, 'g');
-                html = html.replace(reg, `${cdnURL}/${key.substring(key.lastIndexOf('.') + 1)}/${item[key]}`);
-                html = html.replace(key, `${cdnURL}/${key.substring(key.lastIndexOf('.') + 1)}/${item[key]}`);
+                if (cdnURL) {
+                    const reg = new RegExp(`assets\\/[\\w\\-\\/]*${key}`, 'g');
+                    html = html.replace(reg, `${cdnURL}/${item[key]}`);
+                    html = html.replace(key, `${cdnURL}/${item[key]}`);
+
+                } else {
+                    html = html.replace(key, item[key]);
+                }
             });
         })
         fs.writeFileSync(path, html, 'utf-8');
