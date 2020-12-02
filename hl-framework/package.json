@@ -5,10 +5,10 @@
   "main": "./src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "set NODE_ENV=dev && node build.js --exec",
-    "build": "set NODE_ENV=test && node build.js --exec",
-    "deploy": "set NODE_ENV=test && node deploy.js --exec",
-    "publish": "set NODE_ENV=test && node publish.js"
+    "dev": "ENV=dev node build.js --exec",
+    "build": "node build.js --exec",
+    "deploy": "node deploy.js --exec",
+    "publish": "node publish.js"
   },
   "author": "",
   "license": "ISC",

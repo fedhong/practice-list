@@ -10,7 +10,7 @@ const pxtovw = require('postcss-px-to-viewport');
 const autoprefixer = require('autoprefixer');
 const dev = require('rollup-plugin-dev');
 
-const nodeEnv = process.env.NODE_ENV;
+const ENV = process.env.ENV;
 
 const config = {
     input: path.resolve('src/app.js'),
@@ -65,7 +65,7 @@ const config = {
                 // console.log(module.code);
             },
         },
-        nodeEnv === 'dev' && dev({
+        ENV === 'dev' && dev({
             force: true,
             dirs: ['build'],
             host: 'localhost',
@@ -103,7 +103,7 @@ async function build() {
     await bundle.write(outputOptions);
 
     // dev环境watch
-    if (nodeEnv === 'dev') {
+    if (ENV === 'dev') {
         const watcher = rollup.watch(watchOptions);
         watcher.on('event', event => {
             console.log(`watch ${event.code}`);
