@@ -118,7 +118,7 @@ async function deploy() {
 
 const args = process.argv.splice(2)
 if (require.main === module) {
-    if (~args.indexOf('--exec')) {
+    if (~args.indexOf('--exec') || ~args.indexOf('-e')) {
 
         !(async () => {
             console.time('use time');
