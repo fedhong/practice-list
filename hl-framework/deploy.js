@@ -116,19 +116,11 @@ async function deploy() {
     })(htmlPath)
 }
 
-const args = process.argv.splice(2)
-if (require.main === module) {
-    if (~args.indexOf('--exec') || ~args.indexOf('-e')) {
-
-        !(async () => {
-            console.time('use time');
-            console.log('---------------> begin');
-            await deploy();
-            console.log('---------------> end');
-            console.timeEnd('use time');
-        })();
-    } else {
-        console.log('\033[42;30m Warning \033[40;32m If you want run it directly, required --exec.\033[0m')
-    }
-}
-module.exports = deploy;
+!(async () => {
+    console.time('use time');
+    console.log('---------------> begin');
+    await require('./build')();
+    await deploy();
+    console.log('---------------> end');
+    console.timeEnd('use time');
+})();

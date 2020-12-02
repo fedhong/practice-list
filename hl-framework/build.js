@@ -11,6 +11,11 @@ const autoprefixer = require('autoprefixer');
 const dev = require('rollup-plugin-dev');
 
 const ENV = process.env.ENV;
+const IS_PROD = ENV === 'prod';
+
+const args = process.argv.splice(2);
+const isServer = ~args.indexOf('--server') || ~args.indexOf('-s');
+const isWatch = ~args.indexOf('--watch') || ~args.indexOf('-w');
 
 const config = {
     input: path.resolve('src/app.js'),
@@ -37,10 +42,10 @@ const config = {
                 pos: 'before',
             }]
         }),
-        // terser(),
+        IS_PROD && terser(),
         postcss({
             //inject: true,
-            // minimize: true,
+            minimize: IS_PROD,
             extract: path.resolve('build/bundle.css'),
             modules: true,
             plugins: [autoprefixer, pxtovw({
@@ -65,7 +70,7 @@ const config = {
                 // console.log(module.code);
             },
         },
-        ENV === 'dev' && dev({
+        isServer && dev({
             force: true,
             dirs: ['build'],
             host: 'localhost',
@@ -103,7 +108,7 @@ async function build() {
     await bundle.write(outputOptions);
 
     // dev环境watch
-    if (ENV === 'dev') {
+    if (isWatch) {
         const watcher = rollup.watch(watchOptions);
         watcher.on('event', event => {
             console.log(`watch ${event.code}`);
@@ -121,7 +126,6 @@ async function build() {
     }
 }
 
-const args = process.argv.splice(2)
 if (require.main === module) {
     if (~args.indexOf('--exec') || ~args.indexOf('-e')) {
         !(async () => {

@@ -4,11 +4,9 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ENV=dev node build.js --exec",
+    "dev": "node build.js --exec --server --watch",
     "build": "node build.js --exec",
-    "deploy": "node deploy.js --exec",
-    "publish": "node publish.js"
+    "deployDev": "ENV=dev node deploy.js"
   },
   "author": "",
   "license": "ISC",
